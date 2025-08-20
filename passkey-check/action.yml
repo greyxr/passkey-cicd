@@ -17,4 +17,4 @@ outputs:
 # How GitHub should run this action
 runs:
   using: "node16"      # run with Node.js 16
-  main: "p/index.js" # entry point file
+  main: "index.js" # entry point file
