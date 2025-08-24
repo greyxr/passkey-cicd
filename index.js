@@ -39,4 +39,7 @@ for (const section of ["PROMOTION", "SECURITY", "AUTHORIZATION"]) {
 }
 html += `</body></html>`;
 
-fs.writeFileSync("report.html", html);
+const reportPath = "report.html";
+console.log("Writing report to " + reportPath)
+fs.writeFileSync(reportPath, html);
+console.log(`::set-output name=report-path::${reportPath}`);
