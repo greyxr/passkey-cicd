@@ -6,7 +6,3 @@ author: "Your Name"
 runs:
   using: "node20"
   main: "index.js"
-
-outputs:
-  report-path:
-    description: "Path to the generated HTML report"
