@@ -1,0 +1,8 @@
+name: "Hello World JS Action"   # human-readable name
+description: "Greets someone and outputs the time"
+author: "Your Name"
+
+# How GitHub should run this action
+runs:
+  using: "node20"
+  main: "index.js"
