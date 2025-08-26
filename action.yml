@@ -1,8 +1,0 @@
-name: "Hello World JS Action"   # human-readable name
-description: "Generates a passkey implementation report"
-author: "Your Name"
-
-# How GitHub should run this action
-runs:
-  using: "node20"
-  main: "index.js"
