@@ -5,6 +5,13 @@ const utils = require("./checkElement.js");
 
 
 (async () => {
+  // overwrite navigator.credentials.get() to check options
+  const originalCredentialsGet = navigator.credentials.get;
+  navigator.credentials.get = async (options) => {
+    console.log("navigator.credentials.get called with options:", options);
+    return originalCredentialsGet(options);
+  };
+
   console.log("Starting browser")
  const browser = await chromium.launch();
   const context = await browser.newContext();
@@ -24,10 +31,16 @@ const utils = require("./checkElement.js");
   // const button = page.getByRole('button', { name: 'Signin with Passkey' });
   // FACTOR: Check for sign-in with passkey button
   results.push(await utils.checkSignInWithPasskeyButton(page));
-  // If no password field, check for continue button
-  await utils.checkContinueButton();
+
+  const submitButton = await utils.getSubmitButton();
+  // If no submit button, check for continue button
+  if (!submitButton) {
+    const checkContinueButtonResult = await utils.checkContinueButton();
+    // push continue button
+  } else {
+    // push submit button
+  }
   // FACTOR: Check for passkey sign-in options
-  // await utils.getSubmitButton();
   await utils.checkPasskeySignInOptions();
 
   // 2. Account settings
