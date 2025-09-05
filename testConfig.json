@@ -1,9 +1,9 @@
 {
-  "loginPage": "http://localhost:5000",
+  "loginPage": "https://www.roblox.com/NewLogin",
   "userSettingsPage": "http://localhost:3000",
   "passkeyPage": "http://localhost:3000",
   "credentials": {
-    "username": "testuser",
-    "password": "testpass"
+    "username": "",
+    "password": ""
   }
 }

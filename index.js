@@ -1,16 +1,16 @@
 const { chromium } = require("playwright");
 const fs = require("fs");
-const config = require("./config.json");
+const config = require("./robloxConfig.json");
 const utils = require("./checkElement.js");
 
 
 (async () => {
   // overwrite navigator.credentials.get() to check options
-  const originalCredentialsGet = navigator.credentials.get;
-  navigator.credentials.get = async (options) => {
-    console.log("navigator.credentials.get called with options:", options);
-    return originalCredentialsGet(options);
-  };
+  // const originalCredentialsGet = navigator.credentials.get;
+  // navigator.credentials.get = async (options) => {
+  //   console.log("navigator.credentials.get called with options:", options);
+  //   return originalCredentialsGet(options);
+  // };
 
   console.log("Starting browser")
  const browser = await chromium.launch();
@@ -25,21 +25,39 @@ const utils = require("./checkElement.js");
   // Navigate to login
   await page.goto(config.loginPage);
   // Get username and password fields
-  const usernameField = await utils.getUsernameField();
-  const passwordField = await utils.getPasswordField();
+  const usernameField = await utils.getUsernameField(page);
+  results.push(  await utils.screenshotElement(usernameField, {pageName: "loginPage", description: "login"}))
+  const passwordField = await utils.getPasswordField(page);
+  results.push(  await utils.screenshotElement(passwordField, {pageName: "loginPage", description: "login"}))
+  if (!usernameField || !passwordField) {
+    console.log("Couldn't find username or password")
+    console.log(usernameField)
+    console.log(passwordField)
+  }
+  await usernameField.fill(config.credentials.username)
+  await passwordField.fill(config.credentials.password)
   // const element = await page.getByRole('button', { name: 'Sign in' })
   // const button = page.getByRole('button', { name: 'Signin with Passkey' });
   // FACTOR: Check for sign-in with passkey button
   results.push(await utils.checkSignInWithPasskeyButton(page));
 
-  const submitButton = await utils.getSubmitButton();
+  const submitButton = await utils.getSubmitButton(page);
+  results.push(await utils.screenshotElement(submitButton, {pageName: "loginPage", description: "submitButton"}))
+  console.log(submitButton);
   // If no submit button, check for continue button
   if (!submitButton) {
+    console.log("Checking for continue button")
     const checkContinueButtonResult = await utils.checkContinueButton();
     // push continue button
   } else {
+    console.log("Clicking login")
     // push submit button
+    await submitButton.click()
   }
+  console.log("Done")
+  await new Promise(resolve => setTimeout(resolve, 2000))
+  results.push(await utils.screenshotPage(page, "login"))
+  console.log(await page.title())
   // FACTOR: Check for passkey sign-in options
   await utils.checkPasskeySignInOptions();
 
